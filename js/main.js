@@ -88,4 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // 5. LÓGICA DO SLIDER (Estudos de Caso)
+    const slides = document.querySelectorAll('.slide');
+    const nextBtn = document.querySelector('.slider-next');
+    const prevBtn = document.querySelector('.slider-prev');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        
+        currentSlide = index;
+        if (currentSlide >= slides.length) currentSlide = 0;
+        if (currentSlide < 0) currentSlide = slides.length - 1;
+        
+        slides[currentSlide].classList.add('active');
+    }
+
+    if (nextBtn && prevBtn) {
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+    }
 });

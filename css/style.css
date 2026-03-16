@@ -537,12 +537,32 @@ section {
 }
 
 /* =========================================
-   6. RESULTADOS (Split Box)
+   6. RESULTADOS (Slider Box)
    ========================================= */
 .container-box {
     background: var(--c-white);
     border-radius: var(--radius-lg);
-    padding: 4rem;
+    padding: 6rem 4rem; /* Mais respiro para o slider */
+}
+
+.slider-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.slider-wrapper {
+    position: relative;
+}
+
+.slide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
 }
 
 .resultados-split {
@@ -555,14 +575,45 @@ section {
 .res-image img {
     border-radius: var(--radius-md);
     width: 100%;
+    height: 400px;
+    object-fit: cover;
 }
 
-.clean-list li {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eaeaea;
+.slider-prev, .slider-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    color: var(--c-accent);
+    cursor: pointer;
+    z-index: 10;
+    padding: 10px;
+    transition: transform 0.3s;
 }
-.clean-list li:last-child { border: none; }
+
+.slider-prev:hover { transform: translateY(-50%) translateX(-5px); }
+.slider-next:hover { transform: translateY(-50%) translateX(5px); }
+
+.slider-prev { left: -10px; }
+.slider-next { right: -10px; }
+
+.slider-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.btn-dark-alpha {
+    background-color: rgba(18, 18, 18, 0.75); /* Diminuído a opacidade do preto */
+    color: var(--t-white);
+    backdrop-filter: blur(5px);
+}
+
+.btn-dark-alpha:hover {
+    background-color: rgba(18, 18, 18, 0.9);
+}
 
 /* =========================================
    7. PROVA SOCIAL (Testimonials)
