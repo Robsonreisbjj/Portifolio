@@ -146,4 +146,20 @@ document.addEventListener('DOMContentLoaded', () => {
             container.addEventListener('touchend', startAutoplay);
         }
     }
+
+    // 6. INFINITE SCROLL (Estudos de Caso)
+    const track = document.querySelector('.carousel-track');
+    if (track) {
+        track.addEventListener('scroll', () => {
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            // Se chegar no final (dos cards duplicados), reseta pro inicio sem animar
+            if (track.scrollLeft >= maxScroll - 10) {
+                track.scrollLeft = 1; 
+            }
+            // Se tentar voltar antes do primeiro, vai pro final
+            if (track.scrollLeft <= 0) {
+                track.scrollLeft = maxScroll - 11;
+            }
+        });
+    }
 });
