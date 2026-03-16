@@ -152,13 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (track) {
         track.addEventListener('scroll', () => {
             const maxScroll = track.scrollWidth - track.clientWidth;
-            // Se chegar no final (dos cards duplicados), reseta pro inicio sem animar
-            if (track.scrollLeft >= maxScroll - 10) {
-                track.scrollLeft = 1; 
+            
+            // Se chegar muito perto do fim, pula pro inicio sem animar
+            if (track.scrollLeft >= maxScroll - 5) {
+                track.scrollTo({ left: 5, behavior: 'auto' });
             }
-            // Se tentar voltar antes do primeiro, vai pro final
+            
+            // Se chegar no inicio, pula pro fim (area duplicada)
             if (track.scrollLeft <= 0) {
-                track.scrollLeft = maxScroll - 11;
+                track.scrollTo({ left: maxScroll - 6, behavior: 'auto' });
             }
         });
     }

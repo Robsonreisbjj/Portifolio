@@ -577,7 +577,6 @@ section {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding: 0 4%; /* Matches the `.container` padding */
-    scroll-behavior: smooth;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
