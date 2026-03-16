@@ -894,9 +894,13 @@ section {
    RESPONSIVE
    ========================================= */
 @media (max-width: 1024px) {
+    :root {
+        --s-section: 4rem; /* Reduzindo de 6rem para 4rem em tablets */
+    }
+
     .intro-split, .accordion-split, .resultados-split {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: 2.5rem; /* Diminuindo o gap entre conteúdos empilhados */
     }
     
     .cards-grid, .transform-grid, .testimonials-grid {
@@ -921,8 +925,20 @@ section {
 }
 
 @media (max-width: 576px) {
-    .hero-bottom-text { flex-direction: column; gap: 1rem; }
+    :root {
+        --s-section: 3rem; /* Espaçamento celular principal drasticamente menor */
+    }
+
+    .hero-bottom-text { flex-direction: column; gap: 1rem; margin-top: 2rem; }
     .hero-bottom-text h2 { font-size: 2.5rem; }
-    .footer-top { grid-template-columns: 1fr; }
+    
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem;}
     .container-box { padding: 2rem 1.5rem; }
+
+    /* Reduz headers grandes que criavam vácuos */
+    .transform-header, .flex-header, .problema .container-header {
+        margin-bottom: 2rem;
+    }
+    
+    .coverflow-container { margin-top: 1rem; }
 }
