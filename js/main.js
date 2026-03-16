@@ -147,12 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 6. INFINITE SCROLL (Estudos de Caso - Efeito Globo)
+    // 6. INFINITE SCROLL (Estudos de Caso - Ultra-Fluido)
     const track = document.querySelector('.carousel-track');
     if (track) {
-        const firstOriginal = document.querySelector('.carousel-card.original');
+        const originalSet = track.querySelectorAll('.original-set');
         
-        // Centraliza no primeiro card real ao carregar
+        // Função para calcular o offset do set central
+        const getSetWidth = () => {
+            const first = originalSet[0];
+            const last = originalSet[originalSet.length - 1];
+            // Largura de um set = gap + largura total dos cards originais
+            return last.offsetLeft + last.clientWidth - first.offsetLeft + 32; // 32 é o gap de 2rem
+        };
+
+        const firstOriginal = originalSet[0];
+
+        // Centralização Inicial
         window.addEventListener('load', () => {
             if (firstOriginal) {
                 const centerOffset = (track.clientWidth - firstOriginal.clientWidth) / 2;
@@ -160,26 +170,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        track.addEventListener('scroll', () => {
-            const maxScroll = track.scrollWidth - track.clientWidth;
-            const scrollLeft = track.scrollLeft;
-            
-            // Buffer de segurança para o pulo ser invisível
-            const threshold = 10; 
+        let isTicking = false;
 
-            // Se chegar no buffer do FIM -> Pula para o INÍCIO real
-            if (scrollLeft >= maxScroll - threshold) {
-                const firstReal = document.querySelector('.carousel-card.original');
-                const centerOffset = (track.clientWidth - firstReal.clientWidth) / 2;
-                track.scrollTo({ left: firstReal.offsetLeft - centerOffset, behavior: 'auto' });
-            }
-            
-            // Se chegar no buffer do INÍCIO -> Pula para o FIM real (último original)
-            if (scrollLeft <= threshold) {
-                const originals = document.querySelectorAll('.carousel-card.original');
-                const lastReal = originals[originals.length - 1];
-                const centerOffset = (track.clientWidth - lastReal.clientWidth) / 2;
-                track.scrollTo({ left: lastReal.offsetLeft - centerOffset, behavior: 'auto' });
+        track.addEventListener('scroll', () => {
+            if (!isTicking) {
+                window.requestAnimationFrame(() => {
+                    const setWidth = getSetWidth();
+                    const scrollLeft = track.scrollLeft;
+                    
+                    // Se estiver muito à direita (entrou no Set C)
+                    if (scrollLeft >= setWidth * 2) {
+                        track.scrollLeft = scrollLeft - setWidth;
+                    } 
+                    // Se estiver muito à esquerda (voltou pro Set A)
+                    else if (scrollLeft <= setWidth / 2) {
+                        track.scrollLeft = scrollLeft + setWidth;
+                    }
+                    
+                    isTicking = false;
+                });
+                isTicking = true;
             }
         });
     }
