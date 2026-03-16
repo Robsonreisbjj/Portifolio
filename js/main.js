@@ -147,20 +147,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 6. INFINITE SCROLL (Estudos de Caso)
+    // 6. INFINITE SCROLL (Estudos de Caso - Efeito Globo)
     const track = document.querySelector('.carousel-track');
     if (track) {
+        const firstOriginal = document.querySelector('.carousel-card.original');
+        
+        // Centraliza no primeiro card real ao carregar
+        window.addEventListener('load', () => {
+            if (firstOriginal) {
+                const centerOffset = (track.clientWidth - firstOriginal.clientWidth) / 2;
+                track.scrollLeft = firstOriginal.offsetLeft - centerOffset;
+            }
+        });
+
         track.addEventListener('scroll', () => {
             const maxScroll = track.scrollWidth - track.clientWidth;
+            const scrollLeft = track.scrollLeft;
             
-            // Se chegar muito perto do fim, pula pro inicio sem animar
-            if (track.scrollLeft >= maxScroll - 5) {
-                track.scrollTo({ left: 5, behavior: 'auto' });
+            // Buffer de segurança para o pulo ser invisível
+            const threshold = 10; 
+
+            // Se chegar no buffer do FIM -> Pula para o INÍCIO real
+            if (scrollLeft >= maxScroll - threshold) {
+                const firstReal = document.querySelector('.carousel-card.original');
+                const centerOffset = (track.clientWidth - firstReal.clientWidth) / 2;
+                track.scrollTo({ left: firstReal.offsetLeft - centerOffset, behavior: 'auto' });
             }
             
-            // Se chegar no inicio, pula pro fim (area duplicada)
-            if (track.scrollLeft <= 0) {
-                track.scrollTo({ left: maxScroll - 6, behavior: 'auto' });
+            // Se chegar no buffer do INÍCIO -> Pula para o FIM real (último original)
+            if (scrollLeft <= threshold) {
+                const originals = document.querySelectorAll('.carousel-card.original');
+                const lastReal = originals[originals.length - 1];
+                const centerOffset = (track.clientWidth - lastReal.clientWidth) / 2;
+                track.scrollTo({ left: lastReal.offsetLeft - centerOffset, behavior: 'auto' });
             }
         });
     }
