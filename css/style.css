@@ -537,67 +537,106 @@ section {
 }
 
 /* =========================================
-   6. RESULTADOS (Slider Box)
+   6. RESULTADOS (Carousel Style)
    ========================================= */
-.container-box {
-    background: var(--c-white);
-    border-radius: var(--radius-lg);
-    padding: 6rem 4rem; /* Mais respiro para o slider */
-}
-
-.slider-container {
-    position: relative;
-    overflow: hidden;
-}
-
-.slider-wrapper {
-    position: relative;
-}
-
-.slide {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-}
-
-.slide.active {
-    display: block;
-    opacity: 1;
-}
-
-.resultados-split {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-}
-
-.res-image img {
-    border-radius: var(--radius-md);
+.carousel-container {
     width: 100%;
-    height: 400px;
-    object-fit: cover;
+    padding: 2rem 0 4rem 0;
+    overflow: hidden; /* Prevent horizontal scrollbar on main container */
 }
 
-.slider-prev, .slider-next {
+.carousel-track {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0 4%; /* Matches the `.container` padding */
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.carousel-track::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+.carousel-card {
+    flex: 0 0 calc(90% - 2rem); /* Makes next card peek out on mobile */
+    max-width: 800px;
+    height: 550px;
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    scroll-snap-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    color: var(--t-white);
+    background-color: var(--c-dark);
+}
+
+@media (min-width: 1024px) {
+    .carousel-card {
+        flex: 0 0 65%; /* Perfect size to show edges of other cards like the reference */
+    }
+}
+
+.c-bg {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: 2.5rem;
-    color: var(--c-accent);
-    cursor: pointer;
-    z-index: 10;
-    padding: 10px;
-    transition: transform 0.3s;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
 }
 
-.slider-prev:hover { transform: translateY(-50%) translateX(-5px); }
-.slider-next:hover { transform: translateY(-50%) translateX(5px); }
+.c-bg img {
+    width: 100%; height: 100%; object-fit: cover;
+}
 
-.slider-prev { left: -10px; }
-.slider-next { right: -10px; }
+.c-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.4) 50%, rgba(18,18,18,0.9) 100%);
+}
+
+.c-content {
+    position: relative;
+    z-index: 2;
+    max-width: 500px;
+    margin-bottom: auto; /* Pushes content to the top */
+}
+
+.c-content h3 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    color: var(--c-white);
+}
+
+.c-content p {
+    color: rgba(255,255,255,0.85);
+    font-size: 1.1rem;
+}
+
+.c-arrow {
+    position: relative;
+    z-index: 2;
+    align-self: flex-end; /* Bottom right */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.carousel-card:hover .c-arrow {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    transform: translateX(5px);
+}
 
 .slider-cta {
     display: flex;
@@ -606,9 +645,10 @@ section {
 }
 
 .btn-dark-alpha {
-    background-color: rgba(18, 18, 18, 0.75); /* Diminuído a opacidade do preto */
+    background-color: rgba(18, 18, 18, 0.70); /* Preto bem mais translúcido */
     color: var(--t-white);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .btn-dark-alpha:hover {
