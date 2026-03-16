@@ -88,4 +88,62 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // 5. ANTES E DEPOIS (Coverflow Autoplay)
+    const cfSlides = document.querySelectorAll('.cf-slide');
+    if(cfSlides.length > 0) {
+        let cfCurrent = 0;
+        let cfInterval;
+
+        function updateCoverflow() {
+            cfSlides.forEach(slide => {
+                slide.className = 'cf-slide'; // reseta todas classes
+            });
+
+            // Active
+            cfSlides[cfCurrent].classList.add('active');
+
+            // Prevs
+            const prev1 = (cfCurrent - 1 + cfSlides.length) % cfSlides.length;
+            const prev2 = (cfCurrent - 2 + cfSlides.length) % cfSlides.length;
+            cfSlides[prev1].classList.add('prev1');
+            cfSlides[prev2].classList.add('prev2');
+
+            // Nexts
+            const next1 = (cfCurrent + 1) % cfSlides.length;
+            const next2 = (cfCurrent + 2) % cfSlides.length;
+            cfSlides[next1].classList.add('next1');
+            cfSlides[next2].classList.add('next2');
+        }
+
+        function nextSlide() {
+            cfCurrent = (cfCurrent + 1) % cfSlides.length;
+            updateCoverflow();
+        }
+
+        function startAutoplay() {
+            // Garante que não duplica
+            clearInterval(cfInterval);
+            cfInterval = setInterval(nextSlide, 2000);
+        }
+
+        function stopAutoplay() {
+            clearInterval(cfInterval);
+        }
+
+        // Init
+        updateCoverflow();
+        startAutoplay();
+
+        // Pause on Hold
+        const container = document.querySelector('.coverflow-container');
+        if (container) {
+            container.addEventListener('mousedown', stopAutoplay);
+            container.addEventListener('touchstart', stopAutoplay);
+            
+            container.addEventListener('mouseup', startAutoplay);
+            container.addEventListener('mouseleave', startAutoplay);
+            container.addEventListener('touchend', startAutoplay);
+        }
+    }
 });

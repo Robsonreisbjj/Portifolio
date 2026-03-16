@@ -682,6 +682,101 @@ section {
 }
 
 /* =========================================
+   7. ANTES E DEPOIS (Coverflow)
+   ========================================= */
+.coverflow-container {
+    position: relative;
+    width: 100%;
+    height: 550px; /* altura celular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    perspective: 1000px;
+    touch-action: pan-y; /* Permite scroll vertical na pagina sem bugar */
+}
+
+.cf-slide {
+    position: absolute;
+    width: 320px; /* largura smartphone modelo */
+    height: 500px;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease, z-index 0s;
+    opacity: 0;
+    pointer-events: none; /* Só o ativo recebe interact */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    background: #000;
+}
+
+.cf-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cf-badge {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+.badge-antes { background-color: var(--c-dark); }
+.badge-depois { background-color: var(--c-accent); }
+
+/* Estados Coverflow (JS Injected) */
+.cf-slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    z-index: 5;
+    pointer-events: auto; /* Esse a gente pode segurar pra pausar (cursor ativo) */
+    cursor: grab;
+}
+.cf-slide.active:active {
+    cursor: grabbing;
+}
+.cf-slide.prev1 {
+    opacity: 0.6;
+    transform: translateX(calc(-100% + 40px)) scale(0.85);
+    z-index: 4;
+}
+.cf-slide.next1 {
+    opacity: 0.6;
+    transform: translateX(calc(100% - 40px)) scale(0.85);
+    z-index: 4;
+}
+.cf-slide.prev2 {
+    opacity: 0.2;
+    transform: translateX(calc(-200% + 100px)) scale(0.7);
+    z-index: 3;
+}
+.cf-slide.next2 {
+    opacity: 0.2;
+    transform: translateX(calc(200% - 100px)) scale(0.7);
+    z-index: 3;
+}
+
+/* Em telas pequenas a gente aproxima mais as cartas laterais para elas caberem */
+@media (max-width: 768px) {
+    .cf-slide {
+        width: 260px;
+        height: 420px;
+    }
+    .cf-slide.prev1 { transform: translateX(calc(-80% + 10px)) scale(0.85); }
+    .cf-slide.next1 { transform: translateX(calc(80% - 10px)) scale(0.85); }
+    .cf-slide.prev2 { transform: translateX(calc(-150% + 30px)) scale(0.7); }
+    .cf-slide.next2 { transform: translateX(calc(150% - 30px)) scale(0.7); }
+}
+
+/* =========================================
    7. PROVA SOCIAL (Testimonials)
    ========================================= */
 .link-orange {
