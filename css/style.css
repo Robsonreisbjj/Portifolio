@@ -448,7 +448,33 @@ section {
 }
 
 .t-image img { width: 100%; height: 100%; transition: transform 0.5s; }
-.t-card:hover .t-image img { transform: scale(1.05); }
+.t-card:hover .t-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Referência: "Post your ideas" Vibe (Floating Premium Image) */
+.mac-window-style {
+    background-color: var(--c-white); /* Fundo contrastante sutil */
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Remover limitador de overflow se a sombra da imagem for cortada */
+}
+
+.t-image.mac-window-style img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 5px 15px rgba(0,0,0,0.03); /* Efeito Flutuante */
+}
+
+/* Remover zoom de hover neste tipo específico para não quebrar o layout elegante */
+.t-image.mac-window-style:hover img {
+    transform: translateY(-5px); /* Movimento leve para cima em vez de dar zoom */
+}
 
 .tag {
     position: absolute;
