@@ -577,11 +577,17 @@ section {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding: 0 4%; /* Matches the `.container` padding */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    cursor: grab; /* Indica que é arrastável/navegável */
 }
+
+.carousel-track:active {
+    cursor: grabbing;
+}
+
 .carousel-track::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none; /* Chrome, Safari e Opera */
 }
 
 .carousel-card {

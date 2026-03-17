@@ -170,21 +170,49 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        let isTicking = false;
+        // 6.1 DRAG TO SCROLL (Desktop)
+        let isDown = false;
+        let startX;
+        let scrollLeftPos;
+
+        track.addEventListener('mousedown', (e) => {
+            isDown = true;
+            track.style.scrollSnapType = 'none'; // Desabilita snap durante o drag
+            startX = e.pageX - track.offsetLeft;
+            scrollLeftPos = track.scrollLeft;
+        });
+
+        track.addEventListener('mouseleave', () => {
+            isDown = false;
+            track.style.scrollSnapType = 'x mandatory';
+        });
+
+        track.addEventListener('mouseup', () => {
+            isDown = false;
+            track.style.scrollSnapType = 'x mandatory';
+        });
+
+        track.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - track.offsetLeft;
+            const walk = (x - startX) * 2; // Velocidade do scroll
+            track.scrollLeft = scrollLeftPos - walk;
+        });
 
         track.addEventListener('scroll', () => {
             if (!isTicking) {
                 window.requestAnimationFrame(() => {
                     const setWidth = getSetWidth();
-                    const scrollLeft = track.scrollLeft;
+                    const currentScroll = track.scrollLeft;
                     
                     // Se estiver muito à direita (entrou no Set C)
-                    if (scrollLeft >= setWidth * 2) {
-                        track.scrollLeft = scrollLeft - setWidth;
+                    if (currentScroll >= setWidth * 2) {
+                        track.scrollLeft = currentScroll - setWidth;
                     } 
                     // Se estiver muito à esquerda (voltou pro Set A)
-                    else if (scrollLeft <= setWidth / 2) {
-                        track.scrollLeft = scrollLeft + setWidth;
+                    else if (currentScroll <= setWidth / 2) {
+                        track.scrollLeft = currentScroll + setWidth;
                     }
                     
                     isTicking = false;
