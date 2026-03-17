@@ -622,6 +622,21 @@ section {
     background: linear-gradient(180deg, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.4) 50%, rgba(18,18,18,0.9) 100%);
 }
 
+.c-highlight {
+    position: absolute;
+    bottom: 80px;
+    right: 32px;
+    width: 140px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    z-index: 3;
+}
+.c-highlight img {
+    width: 100%;
+    display: block;
+}
+
 .c-content {
     position: relative;
     z-index: 2;
