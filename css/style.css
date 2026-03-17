@@ -274,7 +274,7 @@ section {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-size: cover;
-    background-position: center 10%;
+    background-position: 80% 0%; /* Foca na parte superior direita, onde está o rosto */
     z-index: 0;
 }
 
@@ -292,7 +292,7 @@ section {
     flex-direction: column;
     justify-content: flex-end;
     height: 100%;
-    padding-top: 40vh; /* Reserva os primeiros 40% da tela para o rosto */
+    padding-top: 45vh; /* Empurra o texto mais para baixo para liberar o rosto */
 }
 
 .hero-top-text { max-width: 800px; }
@@ -962,4 +962,10 @@ section {
     }
     
     .coverflow-container { margin-top: 1rem; }
+
+    /* Zoom no Hero Mobile para focar no rosto */
+    .hero-bg {
+        background-size: 140%;
+        background-position: 75% 0%;
+    }
 }
