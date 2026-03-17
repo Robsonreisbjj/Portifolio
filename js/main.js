@@ -147,78 +147,101 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 6. INFINITE SCROLL (Estudos de Caso - Ultra-Fluido)
+    // 6. INFINITE SCROLL (Estudos de Caso - Dinâmico com Clonagem)
     const track = document.querySelector('.carousel-track');
     if (track) {
-        const originalSet = track.querySelectorAll('.original-set');
-        
-        // Função para calcular o offset do set central
-        const getSetWidth = () => {
-            const first = originalSet[0];
-            const last = originalSet[originalSet.length - 1];
-            // Largura de um set = gap + largura total dos cards originais
-            return last.offsetLeft + last.clientWidth - first.offsetLeft + 32; // 32 é o gap de 2rem
+        const setupCarousel = () => {
+            const originalCards = Array.from(track.children);
+            if (originalCards.length === 0) return;
+
+            // Limpa clones antigos se houver (para evitar duplicatas no resize)
+            track.querySelectorAll('.carousel-clone').forEach(el => el.remove());
+
+            // Clona cards para o início (Buffer A) e fim (Buffer C)
+            const clonesEnd = originalCards.map(card => {
+                const clone = card.cloneNode(true);
+                clone.classList.add('carousel-clone');
+                return clone;
+            });
+            const clonesStart = originalCards.map(card => {
+                const clone = card.cloneNode(true);
+                clone.classList.add('carousel-clone');
+                return clone;
+            });
+
+            // Adiciona clones ao track
+            clonesEnd.forEach(clone => track.appendChild(clone));
+            clonesStart.reverse().forEach(clone => track.insertBefore(clone, track.firstChild));
+
+            // Função para calcular largura de um set completo
+            const getSetWidth = () => {
+                const gap = parseFloat(getComputedStyle(track).gap) || 32;
+                const totalCardsWidth = originalCards.reduce((acc, card) => acc + card.offsetWidth, 0);
+                return totalCardsWidth + (originalCards.length * gap);
+            };
+
+            // Centralização Inicial
+            setTimeout(() => {
+                const setWidth = getSetWidth();
+                track.scrollLeft = setWidth;
+            }, 100);
+
+            // 6.1 DRAG TO SCROLL (Desktop)
+            let isDown = false;
+            let isTicking = false;
+            let startX;
+            let scrollLeftPos;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.style.scrollSnapType = 'none';
+                startX = e.pageX - track.offsetLeft;
+                scrollLeftPos = track.scrollLeft;
+            });
+
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.style.scrollSnapType = 'x mandatory';
+            });
+
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.style.scrollSnapType = 'x mandatory';
+            });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2;
+                track.scrollLeft = scrollLeftPos - walk;
+            });
+
+            // 6.2 LÓGICA DE INFINITE SCROLL NO EVENTO DE SCROLL
+            track.addEventListener('scroll', () => {
+                if (!isTicking) {
+                    window.requestAnimationFrame(() => {
+                        const setWidth = getSetWidth();
+                        const currentScroll = track.scrollLeft;
+                        
+                        if (currentScroll >= setWidth * 2) {
+                            track.scrollLeft = currentScroll - setWidth;
+                        } else if (currentScroll <= 0) {
+                            track.scrollLeft = currentScroll + setWidth;
+                        }
+                        isTicking = false;
+                    });
+                    isTicking = true;
+                }
+            });
         };
 
-        const firstOriginal = originalSet[0];
-
-        // Centralização Inicial
-        window.addEventListener('load', () => {
-            if (firstOriginal) {
-                const centerOffset = (track.clientWidth - firstOriginal.clientWidth) / 2;
-                track.scrollLeft = firstOriginal.offsetLeft - centerOffset;
-            }
-        });
-
-        // 6.1 DRAG TO SCROLL (Desktop)
-        let isDown = false;
-        let startX;
-        let scrollLeftPos;
-
-        track.addEventListener('mousedown', (e) => {
-            isDown = true;
-            track.style.scrollSnapType = 'none'; // Desabilita snap durante o drag
-            startX = e.pageX - track.offsetLeft;
-            scrollLeftPos = track.scrollLeft;
-        });
-
-        track.addEventListener('mouseleave', () => {
-            isDown = false;
-            track.style.scrollSnapType = 'x mandatory';
-        });
-
-        track.addEventListener('mouseup', () => {
-            isDown = false;
-            track.style.scrollSnapType = 'x mandatory';
-        });
-
-        track.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - track.offsetLeft;
-            const walk = (x - startX) * 2; // Velocidade do scroll
-            track.scrollLeft = scrollLeftPos - walk;
-        });
-
-        track.addEventListener('scroll', () => {
-            if (!isTicking) {
-                window.requestAnimationFrame(() => {
-                    const setWidth = getSetWidth();
-                    const currentScroll = track.scrollLeft;
-                    
-                    // Se estiver muito à direita (entrou no Set C)
-                    if (currentScroll >= setWidth * 2) {
-                        track.scrollLeft = currentScroll - setWidth;
-                    } 
-                    // Se estiver muito à esquerda (voltou pro Set A)
-                    else if (currentScroll <= setWidth / 2) {
-                        track.scrollLeft = currentScroll + setWidth;
-                    }
-                    
-                    isTicking = false;
-                });
-                isTicking = true;
-            }
+        window.addEventListener('load', setupCarousel);
+        // Opcional: Recalcular no redimensionamento da tela
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(setupCarousel, 250);
         });
     }
 });
