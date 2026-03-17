@@ -274,7 +274,7 @@ section {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-size: cover;
-    background-position: 80% 0%; /* Foca na parte superior direita, onde está o rosto */
+    background-position: center 25%;
     z-index: 0;
 }
 
@@ -290,12 +290,12 @@ section {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
     height: 100%;
-    padding-top: 45vh; /* Empurra o texto mais para baixo para liberar o rosto */
+    padding-top: 12rem;
 }
 
-.hero-top-text { max-width: 800px; }
+.hero-top-text { max-width: 800px; margin-bottom: auto;}
 .hero-top-text p {
     color: rgba(255,255,255,0.8);
     font-size: 1.25rem;
@@ -962,10 +962,4 @@ section {
     }
     
     .coverflow-container { margin-top: 1rem; }
-
-    /* Zoom no Hero Mobile para focar no rosto */
-    .hero-bg {
-        background-size: 140%;
-        background-position: 75% 0%;
-    }
 }
