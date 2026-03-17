@@ -962,4 +962,14 @@ section {
     }
     
     .coverflow-container { margin-top: 1rem; }
+
+    /* Ajuste Hero Mobile: Rosto livre e centralizado */
+    .hero-bg {
+        background-size: 150%;
+        background-position: 70% 0%;
+    }
+    .hero-container {
+        padding-top: 50vh;
+        justify-content: flex-end;
+    }
 }
