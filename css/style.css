@@ -274,7 +274,7 @@ section {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-size: cover;
-    background-position: center 25%;
+    background-position: center 5%;
     z-index: 0;
 }
 
@@ -290,12 +290,12 @@ section {
     z-index: 2;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 100%;
-    padding-top: 12rem;
+    padding-top: 55vh; /* Garante que a metade superior da tela fique livre para o rosto */
 }
 
-.hero-top-text { max-width: 800px; margin-bottom: auto;}
+.hero-top-text { max-width: 800px; }
 .hero-top-text p {
     color: rgba(255,255,255,0.8);
     font-size: 1.25rem;
