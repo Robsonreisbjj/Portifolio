@@ -559,7 +559,7 @@ section {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 20%; /* Ajusta para focar no rosto e cortar o topo/base conforme desenhado */
+    object-position: center bottom; /* Ajusta para mostrar a base da foto e evitar o recorte no rodapé da imagem */
 }
 
 /* =========================================
